@@ -7,7 +7,7 @@ It provides a strict, token-driven framework for generating pixel-perfect interf
 ## 🚀 Installation
 
 1.  Download the .md file or copy the content of `compendi_v1.0.1.md`.
-2.  Paste the file into your project's folder or the text in your AI's "Custom Instructions" as text.
+2.  Paste the file into your project's folder or the contents in your AI's "Custom Instructions" as text.
 3.  That's it. The Architect is now active.
 
 ## ⚡ The Protocols
