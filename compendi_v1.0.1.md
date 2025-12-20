@@ -33,7 +33,7 @@ Your behaviour:
 
 * For every component, ALWAYS start by neutralizing default browser styles (like margins, padding, borders, backgrounds, and font properties) before applying the design system's tokens. This ensures that only the styles explicitly defined in this bible are rendered.
 
-* ALWAYS follow the choosen UI style catalogue entry strictly, ensuring all the colors, fonts, element styles and such comply exactly to what was specified within it.
+* ALWAYS follow the chosen UI style catalogue entry strictly, ensuring all the colors, fonts, element styles and such comply exactly to what was specified within it.
 
 * NEVER create an interface element featuring a color, font or element style that hasn't been specified inside of the selected UI style catalogue entry, **UNLESS** that element is covered by a specific `Component Rule Override` that demands a unique value (like a specific gradient or shadow) to maintain high fidelity.
 
@@ -75,7 +75,7 @@ Global design good practices:
 
 * When adding an icon inside of an input field, ALWAYS place it left of the text element, with spacing-sm between these elements.
 
-* When applying dropdown menus, the trigger button must ALWAYS have enough width to display the lenghtiest option item without overflowing or hiding text. IF there's not enought space to do so, add a "..." to the text;
+* When applying dropdown menus, the trigger button must ALWAYS have enough width to display the lengthiest option item without overflowing or hiding text. IF there's not enough space to do so, add a "..." to the text;
 
 * ALL icons inside of input elements must ALWAYS match the text-color of the component;
 
@@ -83,7 +83,7 @@ Global design good practices:
 
 * Status-related badges should ALWAYS feature a 10px x 10px circle, color matching the badge status, with a simple ripple animation, to the left of the text, with spacing-sm between them;
 
-* Modals should ALWAYS have a Title and a Subtitle with descriptive information, these should ALWAYS be spacing-sm apart from eachother.
+* Modals should ALWAYS have a Title and a Subtitle with descriptive information, these should ALWAYS be spacing-sm apart from each other.
 
 * Toasts should always be positioned bottom right of the screen, with spacing-xlg margin from the screen corner;
 
@@ -93,6 +93,17 @@ Global design good practices:
   - When generating **JSON/JS/TS** themes, convert this to dot-notation (e.g., `theme.color.background.page`).
   - When generating **CSS Variables**, use the hyphenated format with a double-dash prefix (e.g., `var(--color-background-page)`).
   - When generating **Tailwind**, map the token to the config standard (e.g., `bg-page`).
+
+* **Special Handling for Depth:**
+  
+  - Map `depth.layer` tokens to `z-index` (e.g., `z-modal`).
+  - Map `depth.lift` tokens to `transform` utilities (e.g., `translate-z-md`).
+  - Map `depth.perspective` to parent container styles.
+
+* **The Standalone Clause (Showcase Protocol):**
+    
+  - When generating single-file HTML/Tailwind showcases (CDN-based), **ALWAYS** apply the global page background and text color as utility classes (e.g., `class="bg-background-page text-text-primary"`) directly on the `<body>` tag.
+  - **NEVER** attempt to set these base styles inside a `<style>` block using `theme()` functions in this context, as the browser cannot interpret them without a build step.
 
 * **Semantic HTML & Accessibility:**
   
@@ -179,6 +190,8 @@ For native applications, download the `.svg` file and import it as a project ass
   - typography-avatar-md: font-size-sm, font-weight-medium, color-text-primary;
   - typography-avatar-lg: font-size-mdl, font-weight-medium, color-text-primary;
 
+- **Primary Button:** color-background-primary background, color-text-inverse text, font-weight-medium, radius-md, no border;
+
 - **Secondary Button:** color-background-secondary background, color-text-primary text, font-weight-regular, radius-md, border-default;
 
 - **Tertiary Button:** no background, color-text-primary text, font-weight-regular, radius-md, no border;
@@ -238,20 +251,48 @@ For native applications, download the `.svg` file and import it as a project ass
   - searchbar-hover: Follows all input-hover rules;
   - searchbar-focus: Follows all input-focus rules, but the border, which should stay as border-hover;
 
+- **Navigation / Tabs:**
+  
+  - Tab Item:
+    
+    - tab-default: typography-small, color-text-body, font-weight-medium, padding-bottom: spacing-sm, border-bottom: 2px solid transparent;
+    - tab-hover: color-text-primary, border-bottom: 2px solid color-border-hover;
+    - tab-active-state: color-text-primary, border-bottom: 2px solid color-text-primary;
+
+- **Sidebar:** color-background-secondary background, border-right: border-default;
+
 - **Dropdown Menus:**
   
   - Trigger Button:
     
-    - dropdown-trigg-default: Follows all input-default rules. MUST have a chevron-down icon on the right side, with spacing-md from the edge;
-    - dropdown-trigg-hover: Follows all input-hover rules;
-    - dropdown-trigg-focus: Follows all input-focus rules;
-    - dropdown-trigg-open: Follows all input-focus rules, and the icon MUST change to chevron-up;
+    - dropdown-trigger-default: Follows all input-default rules. MUST have a chevron-down icon on the right side, with spacing-md from the edge;
+    - dropdown-trigger-hover: Follows all input-hover rules;
+    - dropdown-trigger-focus: Follows all input-focus rules;
+    - dropdown-trigger-open: Follows all input-focus rules, and the icon MUST change to chevron-up;
   
   - Dropdown Option Item:
     
     - option-default: typography-small, color-text-body, font-weight-light;
     - option-hover: color-background-secondary background, typography-small, color-text-body, font-weight-light;
     - All states above MUST feature spacing-sm padding on all sides;
+
+- **Selection Controls:**
+  
+  - **Checkbox:**
+    
+    - checkbox-default: 16px x 16px size, radius-sm, border-default, color-background-secondary background;
+    - checkbox-checked: color-background-primary background, border-transparent. MUST contain a checkmark icon in color-text-inverse;
+
+  - **Radio Button:**
+    
+    - radio-default: 16px x 16px size, radius-full, border-default, color-background-secondary background;
+    - radio-selected: border-primary. MUST contain an 8px x 8px circle in color-background-primary centered inside;
+
+  - **Switch / Toggle:**
+    
+    - toggle-track: 44px width x 24px height, radius-pill, color-background-tertiary background, transition: background-color {motion.duration.fast};
+    - toggle-thumb: 20px x 20px size, radius-full, color-base-white background, shadow-sm. MUST translate position on state change;
+    - toggle-track-on: color-background-primary background;
 
 - **Icons:**
   
@@ -449,6 +490,32 @@ For native applications, download the `.svg` file and import it as a project ass
     "lg": { "value": "24px" },
     "xlg": { "value": "32px" }
   },
+  "breakpoints": {
+    "mobile": { "value": "0px" },
+    "tablet": { "value": "768px" },
+    "desktop": { "value": "1024px" },
+    "wide": { "value": "1440px" }
+  },
+  "layout": {
+    "mode": { "value": "dashboard" },
+    "grid": {
+      "columns": { "value": 12 },
+      "gutter": { "value": "{spacing.md.value}" },
+      "margin": { "value": "{spacing.lg.value}" }
+    },
+    "container": {
+      "max-width": { "value": "1440px" },
+      "padding": { "value": "{spacing.lg.value}" }
+    },
+    "section": {
+      "spacing": { "value": "{spacing.xlg.value}" },
+      "screen-edge": { "value": "contained" }
+    },
+    "sidebar": {
+      "width": { "value": "280px" },
+      "collapsed-width": { "value": "72px" }
+    }
+  },
   "motion": {
     "duration": {
       "instant": { "value": "0ms" },
@@ -462,6 +529,30 @@ For native applications, download the `.svg` file and import it as a project ass
       "standard": { "value": "cubic-bezier(0.4, 0, 0.2, 1)" },
       "spring": { "value": "cubic-bezier(0.25, 0.46, 0.45, 0.94)" },
       "bounce": { "value": "cubic-bezier(0.175, 0.885, 0.32, 1.275)" }
+    }
+  },
+  "depth": {
+    "perspective": {
+      "flat": { "value": "none" },
+      "close": { "value": "800px" },
+      "standard": { "value": "1200px" },
+      "deep": { "value": "2000px" }
+    },
+    "lift": {
+      "flat": { "value": "translateZ(0px)" },
+      "sm": { "value": "translateZ(10px)" },
+      "md": { "value": "translateZ(40px)" },
+      "lg": { "value": "translateZ(100px)" },
+      "orbit": { "value": "translateZ(200px)" }
+    },
+    "layer": {
+      "base": { "value": 0 },
+      "floating": { "value": 10 },
+      "overlay": { "value": 20 },
+      "modal": { "value": 30 },
+      "always-on-top": { "value": 40 },
+      "cursor": { "value": 50 },
+      "god": { "value": 9999 }
     }
   }
 }
@@ -481,7 +572,7 @@ For native applications, download the `.svg` file and import it as a project ass
 - **Navigation / Tabs:**
   - Tab Item:
     - tab-active-state: no background, color-text-primary text, border-bottom: 2px solid {color.background.primary.value};
-    - tab-default-hover: color-text-primary text;
+    - tab-hover: color-text-primary text;
 
 - **Switch / Toggle:**
   - toggle-track-on: color-background-primary background;
@@ -548,6 +639,16 @@ Tabs provide a way to organize and navigate between different views or sets of c
     - **Description:** An individual, clickable tab that switches the view to its corresponding content panel.
     
     - **Usage:** Tab labels should be short and descriptive. Ensure the active tab is always clearly differentiated from the inactive ones.
+
+### **Sidebar (Navigation Drawer)**
+
+Sidebars are vertical navigation panels that provide access to the main sections of an application.
+
+- **Sidebar:**
+    
+    - **Description:** A persistent vertical container, typically on the left, housing the primary navigation links.
+    
+    - **Usage:** Use for high-level navigation in "Dashboard" layouts. It should remain visible on large screens and may collapse or become an off-canvas drawer on mobile.
 
 ### **Cards**
 
@@ -931,11 +1032,32 @@ The theme must define all of the following tokens, organized into the specified 
   
   - `xxs`, `xs`, `sm`, `smd`, `md`, `lg`, `xlg`: The scale for margins and paddings.
 
-- **`layout`**: Defines the page structure and responsiveness.
+- **`breakpoints`**: Defines the viewport widths where layout shifts occur.
   
-  - `mode`: `centered` (classic), `fluid` (full-width), `dashboard` (sidebar + content).
-  - `max-width`: The maximum width of the main content container (e.g., `1200px` or `100%`).
-  - `grid-gap`: The default spacing between major layout columns.
+  - `mobile`, `tablet`, `desktop`, `wide`: The pixel values for media queries.
+
+- **`layout`**: Defines the structural skeleton of the interface.
+  
+  - **`grid`**:
+    
+    - `columns`: The number of vertical columns (e.g., 4 mobile, 8 tablet, 12 desktop).
+    - `gutter`: The space between columns (usually maps to a spacing token, e.g., `spacing.md`).
+    - `margin`: The outer margin of the grid container (e.g., `spacing.lg`).
+
+  - **`container`**:
+    
+    - `max-width`: The maximum width for centered content (e.g., `1280px` or `1440px`).
+    - `padding`: Default horizontal padding for containers.
+
+  - **`section`**:
+    
+    - `spacing`: The standard vertical rhythm between major page sections (e.g., `spacing.xlg` or `80px`).
+    - `screen-edge`: Behavior for full-width sections (e.g., `full-bleed` vs `contained`).
+
+  - **`sidebar`**:
+    
+    - `width`: Fixed width of the sidebar (e.g., `280px`).
+    - `collapsed-width`: Width when collapsed (e.g., `64px`).
 
 - **`motion`**: Defines the timing and feel of interactions.
   
@@ -947,11 +1069,40 @@ The theme must define all of the following tokens, organized into the specified 
     
     - `linear`, `standard`, `spring`, `bounce`.
 
+- **`depth`**: Defines the volumetric and layering properties of the interface.
+  
+  - **`perspective`**:
+    
+    - `flat`: "none"
+    - `close`: "800px" (High distortion, dramatic)
+    - `standard`: "1200px" (Natural viewing distance)
+    - `deep`: "2000px" (Telephoto, flattened depth)
+  
+  - **`lift`** (Z-Axis Translation):
+    
+    - `flat`: "0px"
+    - `sm`: "10px" (Subtle hover)
+    - `md`: "40px" (Floating cards)
+    - `lg`: "100px" (Major structural separation)
+    - `orbit`: "200px+" (Background/Foreground elements)
+
+  - **`layer`** (Z-Index Stratigraphy):
+    
+    - `base`: 0 (Default content)
+    - `floating`: 10 (Raised cards, sticky headers)
+    - `overlay`: 20 (Dropdowns, tooltips)
+    - `modal`: 30 (Dialogs, full-screen takeovers)
+    - `always-on-top`: 40 (Toast notifications)
+    - `cursor`: 50 (Custom interaction pointers)
+    - `god`: 9999 (Debug tools, critical errors)
+
 ### II. COMPONENT RULE OVERRIDES
 
 The theme must define specific styles for the following components, overriding the base rules where necessary.
 
 - **Primary Button**
+- **Secondary Button**
+- **Tertiary Button**
 - **Navigation / Tabs**
 - **Tables**
 - **Dropdown Menus**
